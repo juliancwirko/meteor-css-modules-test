@@ -39,7 +39,7 @@ As you can see I can import a .css file and then use it like: `className={style.
 
 ### What is not so cool:
 
-- for now there isn't a separated package - there is only modyfied `modules` package in the `/packages` folder. There isn't a simple way to remove core `modules` package in Meteor
+- for now there isn't a separated package - there is only modified `modules` package in the `/packages` folder. There isn't a simple way to remove core `modules` package in Meteor
 - for now there are no sourcemaps
 - required .css files are attached to the `<head>` so in a big app it could be problematic.
 
