@@ -6,6 +6,15 @@ In Meteor we have the possibility to import CSS in .js files. These CSS contents
 
 I've used that functionality and modified `modules` package (for now only as local package in `/packages` folder)
 
+### Run it!
+
+```
+$ git clone https://github.com/juliancwirko/meteor-css-modules-test.git
+$ cd meteor-css-modules-test
+$ npm install
+$ meteor
+```
+
 ### What I've done:
 
 - I use postcss and [postcss-modules-scope](https://github.com/css-modules/postcss-modules-scope) to transform css contents
