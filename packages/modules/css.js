@@ -4,28 +4,27 @@ var localByDefault = require('postcss-modules-local-by-default');
 var cssParser = require('css');
 
 var doc = document;
-var head = doc.getElementsByTagName("head").item(0);
+var head = doc.getElementsByTagName('head').item(0);
+
+// generated class names format
+var generateScopedName = function (exportedName, path) {
+  var sanitisedPath = path.replace(/\.[^\.\/\\]+$/, '').replace(/[\W_]+/g, '_').replace(/^_|_$/g, '');
+  var scopeRandomString = Math.random().toString(36).substring(21);
+  return sanitisedPath + '__' + exportedName + '__' + scopeRandomString;
+};
 
 exports.addStyles = function (css) {
-  var style = doc.createElement("style");
   var styleValueObject;
 
-  style.setAttribute("type", "text/css");
-
-  var result = postcss([localByDefault, postcssModules]).process(css);
-
+  var result = postcss([localByDefault, postcssModules({generateScopedName: generateScopedName})]).process(css);
   var resultWithoutExports = result.css.replace(/(:export)\s+[{](.*|(.*[/\n*])*)[}]/g, '');
 
-  // https://msdn.microsoft.com/en-us/library/ms535871(v=vs.85).aspx
-  var internetExplorerSheetObject =
-    style.sheet || // Edge/IE11.
-    style.styleSheet; // Older IEs.
-
-  if (internetExplorerSheetObject) {
-    internetExplorerSheetObject.cssText = resultWithoutExports;
-  } else {
-    style.appendChild(doc.createTextNode(resultWithoutExports));
-  }
+  window.URL = window.URL || window.webkitURL;
+  var blob = new Blob([resultWithoutExports], {type: 'text/css'});
+  var link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = window.URL.createObjectURL(blob);
+  head.appendChild(link);
 
   var parsedCss = cssParser.parse(result.css);
   var styleObj = {};
@@ -35,8 +34,6 @@ exports.addStyles = function (css) {
   })[0].declarations.forEach(function (d) {
     return styleObj[d.property] = d.value;
   });
-
-  head.appendChild(style);
 
   return styleObj;
 

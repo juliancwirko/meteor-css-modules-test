@@ -56,4 +56,4 @@ As you can see I can import a .css file and then use it like: `className={style.
 
 - separated package published on Atmosphere
 - posibility to use postcss configuration - so you will be able to use other syntaxes like .scss or other postcss plugins
-- write as files (??)
+- write as files/blobs (??)
